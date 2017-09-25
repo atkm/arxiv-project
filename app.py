@@ -1,5 +1,4 @@
 import os
-import requests
 import json
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -20,12 +19,8 @@ def index():
     return render_template('index.html')
 
 @app.route('/arxiv')
-def arxiv_query():
-    baseurl = 'http://export.arxiv.org/api/query?search_query='
-    query = 'all:electron&start=0&max_results=1'
-    response = requests.get(baseurl + query)
-    #parse_arxiv_atom(response.text)
-    return response
+def query():
+    pass
 
 if __name__ == '__main__':
     app.run()
