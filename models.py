@@ -33,9 +33,6 @@ class Author(db.Model):
     __tablename__ = 'authors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
-    # not needed when using backref.
-    #articles = db.relationship('Article', secondary=article_author,\
-    #        back_populates='authors')
 
     def __init__(self, name):
         self.name = name
@@ -47,8 +44,6 @@ class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
-    #articles = db.relationship('Article', secondary=article_category,\
-    #        back_populates='categories')
 
     def __init__(self, category):
         self.name = category
@@ -62,14 +57,12 @@ class Result(db.Model):
     __tablename__ = 'results'
 
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String())
-    result_all = db.Column(JSON)
-    result_no_stop_words = db.Column(JSON)
+    category = db.Column(db.String())
+    keywords = db.Column(JSON)
 
-    def __init__(self, url, result_all, result_no_stop_words):
-        self.url = url
-        self.result_all = result_all
-        self.result_no_stop_words = result_no_stop_words
+    def __init__(self, category, keywords):
+        self.category = category
+        self.keywords = keywords
 
     def __repr__(self):
         return '<id {}>'.format(self.id)

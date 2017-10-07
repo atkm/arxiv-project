@@ -38,7 +38,7 @@ var categoryDropdown = new Vue({
           data = response.data;
           if (status === '202') {
             console.log(data, status);
-            setTimeout(this.pollResult, 2000, jobID);
+            setTimeout(this.pollResult, 30000, jobID); // modify to give up after a while
           } else if (status === '200') {
             console.log(data, status);
             keywordsResult.supply(data);

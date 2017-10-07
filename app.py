@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 q = Queue(connection=conn)
 
 from models import *
+from keyword_extraction_local import extract_keywords
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -21,35 +22,33 @@ def index():
     return render_template('index.html', math_categories=math_categories)
 
 @app.route('/start', methods=['POST'])
-def get_keywords_fake():
-    data = json.loads(request.data.decode())
-    print(data)
-    return '1'
-
 def get_keywords():
     data = json.loads(request.data.decode())
-    print(data)
     category = data['category']
     #run validation here
     job = q.enqueue_call(
-            func = extract_keywords, args=(category,), result_ttl=1000
+            func = get_keywords_func, args=(category,), result_ttl=10000 #keep result long for testin
             )
     return job.get_id()
 
-@app.route('/results/<job_key>', methods=['GET'])
-def get_results_fake(job_key):
-    return jsonify(['dynamical systems', 'SRB measure', 'Farruh Shahidi'])
+def get_keywords_func(category):
+    # add: if category exists in Result, then give back its result.id
+    keywords = extract_keywords(category)
+    
+    result = Result(
+            category = category,
+            keywords = keywords
+            )
+    db.session.add(result)
+    db.session.commit()
+    return result.id
 
+@app.route('/results/<job_key>', methods=['GET'])
 def get_results(job_key):
     job = Job.fetch(job_key, connection=conn)
     if job.is_finished:
         result = Result.query.filter_by(id=job.result).first()
-        results = sorted(
-                result.result_no_stop_words.items(),
-                key=operator.itemgetter(1),
-                reverse=True
-                )[:10]
-        return jsonify(results)
+        return jsonify(result.keywords)
     else:
         return 'Nope!', 202
 
