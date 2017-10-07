@@ -7,6 +7,7 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'dev'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    STATIC_PATH = os.path.join(basedir, 'static/')
 
 class ProductionConfig(Config):
     DEBUG = False

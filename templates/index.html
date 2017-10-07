@@ -17,15 +17,47 @@
   </head>
   <body>
     <div class="container">
+      <div class='row'>
+        <div class='col-sm-offset-1'>
+          <h1>数学分野別重要用語</h1>
+        </div>
+      <div class='row'>
+      <br>
       <div class="row">
-        <div class="col-sm-5 col-sm-offset-1">
-          <h1>arXiv</h1>
-          <div id='atom-response'>
-            {% raw %}
-            {{ computedMessage }}
-            {% endraw %}
+        <div class="col-sm-3 col-sm-offset-1">
+          <div id='category-dropdown'>
+            <div class='dropdown form-group'>
+              <select type='text' class='form-control' style='max-width: 150px;'
+                v-model='selected' autofocus required>
+                <option disabled selected value=''>Select category</option>
+                {% for c in math_categories %}
+                <option>{{ c }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type='submit' class='btn btn-default' v-on:click='submit'>Submit</button>
           </div>
         </div>
+
+        <div class="col-sm-5">
+          <div id='keywords-result'>
+            <table class='table table-striped' v-if='show'>
+              <thead>
+                <tr>
+                  <th>Keywords</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% raw %}
+                <tr v-for='k in keywords'>
+                  <td>{{ k }}</td>
+                </tr>
+                {% endraw %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>
