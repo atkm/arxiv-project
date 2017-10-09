@@ -47,16 +47,16 @@ def load_data(category):
     abs_c = df_c.apply(lambda row: 
             '. '.join([row['title'], row['abstract']]), axis=1)
     print('Data loaded')
-    return abs_c[:100] # use a small dataset for testing
+    return abs_c
 
 def remove_stopwords(text):
     stopWords = set(stopwords.words('english'))
     return ' '.join([w for w in text.split() if w not in stopWords])
 
 def extract_keywords(category):
-    K = 10
+    K = 100
     abs_c = load_data(category)
-    cluster = cluster_docs(abs_c, K) # use small K for testing
+    cluster = cluster_docs(abs_c, K)
     abs_clusters = pd.DataFrame({
         'cluster': cluster,
         'text': abs_c
