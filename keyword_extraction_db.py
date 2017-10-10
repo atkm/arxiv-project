@@ -6,12 +6,10 @@ from sklearn.cluster import KMeans, MiniBatchKMeans
 import heapq
 from nltk.corpus import stopwords
 
-'''
-Prototype of keyword extraction procedure
-Load data in in-memory pd.DataFrame
-'''
+from app import db
+from models import *
 
-# using a stream for text and HashingVectorizer instead of TfidfVectorizer is more memory-efficient,
+# Using a stream for text and HashingVectorizer instead of TfidfVectorizer is more memory-efficient,
 # though that would mean giving up tfidf. 
 def rank_phrases(text, n):
     tfidf_vect = TfidfVectorizer(ngram_range=(2,4))
@@ -23,40 +21,57 @@ def rank_phrases(text, n):
         tfidf_dict[k] = text_vect[v]
     return heapq.nlargest(n, tfidf_dict, key=tfidf_dict.get)
 
+
 def cluster_docs(abstracts, K):
     tfidf_vect = TfidfVectorizer()
     abs_tfidf = tfidf_vect.fit_transform(abstracts)
-    print('Running kmeans')
+    print('Running kmeans.')
     kmeans = MiniBatchKMeans(n_clusters=K, batch_size=1000, reassignment_ratio=0).fit(abs_tfidf)
-    print('Kmeans finished')
+    print('Kmeans finished.')
     cluster = kmeans.predict(abs_tfidf)
     return cluster
 
+
 def load_data(category):
-    print('Loading data')
-    with open('metha-all-math.pkl','rb') as f:
-        df = pickle.load(f)
-    
+    print('Pulling data from Postgres.')
+    df = pull_abstracts(category)
     df['abstract'] = df['abstract'].apply(lambda t: t.replace('\n',' '))\
             .apply(remove_stopwords)
     df['title'] = df['title'].apply(lambda t: t.replace('\n',' '))\
             .apply(remove_stopwords)
-    
-    mask = df['categories'].apply(lambda cs: True if category in cs else False)
-    df_c = df[mask]
-    abs_c = df_c.apply(lambda row: 
+    abs_c = df.apply(lambda row: 
             '. '.join([row['title'], row['abstract']]), axis=1)
-    print('Data loaded')
-    return abs_c[:100] # use a small dataset for testing
+    print('Data loaded.')
+    return abs_c
+    
+
+def pull_abstracts(category):
+    articles = db.session.query(Article)\
+            .filter(Article.id == article_category.c.article_id)\
+            .filter(Category.id == article_category.c.category_id)\
+            .filter(Category.name == category)
+    
+    identifier, title, authors, abstract, categories, submitted = ([] for i in range(6))
+    for row in articles:
+        title.append(row.title)
+        abstract.append(row.abstract)
+        #categories.append( [c.name for c in row.categories] )
+
+    df = pd.DataFrame({
+        'title': title,
+        'abstract': abstract,
+        })
+    return df
+
 
 def remove_stopwords(text):
     stopWords = set(stopwords.words('english'))
     return ' '.join([w for w in text.split() if w not in stopWords])
 
 def extract_keywords(category):
-    K = 10
+    K = 100
     abs_c = load_data(category)
-    cluster = cluster_docs(abs_c, K) # use small K for testing
+    cluster = cluster_docs(abs_c, K)
     abs_clusters = pd.DataFrame({
         'cluster': cluster,
         'text': abs_c
@@ -70,6 +85,3 @@ def extract_keywords(category):
 
     print(keywords)
     return keywords
-
-if __name__=='__main__':
-    category_keywords('math.AT')

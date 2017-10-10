@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 q = Queue(connection=conn)
 
 from models import *
-from keyword_extraction_local import extract_keywords
+from keyword_extraction_db import extract_keywords
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
