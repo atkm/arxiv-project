@@ -1,5 +1,7 @@
 alembic==0.9.5
 bleach==2.0.0
+boto==2.48.0
+bz2file==0.98
 certifi==2017.7.27.1
 chardet==3.0.4
 click==6.7
@@ -11,6 +13,7 @@ Flask==0.12.2
 Flask-Migrate==2.1.1
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.2
+gensim==3.0.0
 html5lib==0.999999999
 idna==2.6
 ipykernel==4.6.1
@@ -43,7 +46,9 @@ prompt-toolkit==1.0.15
 psycopg2==2.7.3.1
 ptyprocess==0.5.2
 Pygments==2.2.0
+PyJWT==1.5.3
 pyparsing==2.2.0
+PySocks==1.6.7
 python-dateutil==2.6.1
 python-editor==1.0.3
 pytz==2017.2
@@ -52,13 +57,17 @@ qtconsole==4.3.1
 redis==2.10.6
 requests==2.18.4
 rq==0.8.2
+scikit-learn==0.19.0
+scipy==0.19.1
 simplegeneric==0.8.1
 six==1.11.0
+smart-open==1.5.3
 SQLAlchemy==1.1.14
 terminado==0.6
 testpath==0.3.1
 tornado==4.5.2
 traitlets==4.3.2
+twilio==6.7.0
 urllib3==1.22
 wcwidth==0.1.7
 webencodings==0.5.1
