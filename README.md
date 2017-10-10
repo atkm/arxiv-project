@@ -12,7 +12,7 @@
      * start redis-server and python worker.py
      * python manage.py runserver
 
-- deploy:
+- deploy (heroku):
      * heroku create appname-{stage,pro}
      * git remote add {stage,pro} git@heroku.com:appname-{stage,pro}.git; then push.
      * heroku config:set APP_SETTINGS=config.StagingConfig --remote stage
@@ -22,10 +22,20 @@
      * heroku addons:create redistogo:nano --app appname-stage
      * Procfile calls heroku.sh to run gunicorn and worker.py
 
+- db (heroku)
+     * Populate postgres with arxiv data. 10,000 rows limit with hobby-dev. Lame.
+     * pg_dump -U postgres -Ft --no-acl --no-owner arxiv_project > arxiv_project.dump.tar
+     * Upload arxiv_project.dump.tar somewhere
+     * heroku pg:backups:restore 'url/to/arxiv_project.dump.tar' DATABASE_URL --app appname-stage;
+        Try http instead of https if download fails.
+
+- deploy (AWS):
+
 - extra:
      * nltk.txt in root to fetch corpora (or create and push nlkt\_data dir)
       
 - Reference:
      * Real Python - Flask by Example
      * Alembic Tutorial (official)
+     * Heroku Postgres - Import/Export
      * Vuejs guide (official)
