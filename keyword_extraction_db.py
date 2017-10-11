@@ -12,7 +12,7 @@ from models import *
 # Using a stream for text and HashingVectorizer instead of TfidfVectorizer is more memory-efficient,
 # though that would mean giving up tfidf. 
 def rank_phrases(text, n):
-    tfidf_vect = TfidfVectorizer(ngram_range=(2,4))
+    tfidf_vect = TfidfVectorizer(ngram_range=(2,2))
     text_vect = tfidf_vect.fit_transform(text)
     text_vect = np.asarray(text_vect.sum(axis=0)).ravel()
     tfidf_dict = dict()

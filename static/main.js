@@ -2,14 +2,17 @@ var keywordsResult = new Vue({
   el: '#keywords-result',
   data: {
     keywords: [],
-    show: false
+    show: false,
+    loading: false
   },
   methods: {
     supply: function(d) {
       this.keywords = d;
     },
     appear: function() { this.show = true; },
-    hide: function() { this.show = false; }
+    hide: function() { this.show = false; },
+    beginLoading: function() { this.loading = true; },
+    doneLoading: function() { this.loading = false; }
   }
 })
 
@@ -21,6 +24,7 @@ var categoryDropdown = new Vue({
   methods: {
     submit: function() {
       keywordsResult.hide();
+      keywordsResult.beginLoading();
       axios.post('/start', {'category': this.selected})
       .then(
         response => {
@@ -42,10 +46,14 @@ var categoryDropdown = new Vue({
           } else if (status === '200') {
             console.log(data, status);
             keywordsResult.supply(data);
+            keywordsResult.doneLoading();
             keywordsResult.appear();
           }
         }
-      ).catch( error => { console.log(error); })
+      ).catch( error => {
+        keywordsResult.doneLoading();
+        console.log(error);
+      })
     }
   }
 })
