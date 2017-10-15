@@ -5,7 +5,7 @@
      * add user via createuser --interactive after sudo -u postgres -i
      * create project\_name table in psql
      * edit DATABASE\_URL in .envrc
-     * python manage.py {init,migrate,upgrade}
+     * python manage.py db {init,migrate,upgrade}
      * metha_to_postgres.py to populate rows
 
 - run (local):
@@ -22,8 +22,7 @@
      * heroku addons:create redistogo:nano --app appname-stage
      * Procfile calls heroku.sh to run gunicorn and worker.py
 
-- db (heroku)
-     * Populate postgres with arxiv data. 10,000 rows limit with hobby-dev. Lame.
+- db (heroku; 10,000 rows limit with hobby-dev) to populate postgres with arxiv data:
      * pg_dump -U postgres -Ft --no-acl --no-owner arxiv_project > arxiv_project.dump.tar
      * Upload arxiv_project.dump.tar somewhere
      * heroku pg:backups:restore 'url/to/arxiv_project.dump.tar' DATABASE_URL --app appname-stage;
