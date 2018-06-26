@@ -11,6 +11,7 @@
 - run (local):
      * start redis-server and python worker.py
      * python manage.py runserver
+     * test local deploy with heroku local
 
 - deploy (heroku):
      * heroku create appname-{stage,pro}
@@ -23,9 +24,9 @@
      * Procfile calls heroku.sh to run gunicorn and worker.py
 
 - db (heroku; 10,000 rows limit with hobby-dev) to populate postgres with arxiv data:
-     * pg_dump -U postgres -Ft --no-acl --no-owner arxiv_project > arxiv_project.dump.tar
-     * Upload arxiv_project.dump.tar somewhere
-     * heroku pg:backups:restore 'url/to/arxiv_project.dump.tar' DATABASE_URL --app appname-stage;
+     * pg_dump -U postgres -Fc --no-acl --no-owner arxiv_project > arxiv_project.dump
+     * Upload arxiv_project.dump somewhere
+     * heroku pg:backups:restore 'url/to/arxiv_project.dump' DATABASE_URL --app appname-stage;
         Try http instead of https if download fails.
 
 - deploy (AWS):
