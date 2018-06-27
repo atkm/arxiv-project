@@ -89,8 +89,8 @@ def cluster_docs(abstracts, K):
     tfidf_vect = TfidfVectorizer()
     abs_tfidf = tfidf_vect.fit_transform(abstracts)
     #print('Running kmeans.')
-    # set the reassignment_ratio > 0 to avoid unbalanced clusters.
-    kmeans = MiniBatchKMeans(n_clusters=K, batch_size=1000, reassignment_ratio=0.1).fit(abs_tfidf)
+    # reassignment_ratio is set to zero, since unbalanced clusters are not harmful to our application.
+    kmeans = MiniBatchKMeans(n_clusters=K, batch_size=1000, reassignment_ratio=0).fit(abs_tfidf)
     #print('Kmeans finished.')
     cluster_idx = kmeans.predict(abs_tfidf)
     return cluster_idx
