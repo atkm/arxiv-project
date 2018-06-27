@@ -1,7 +1,7 @@
 from app import db
 from models import Article, Author, Category, article_author, article_category
 
-import os, gzip, glob
+import os, gzip, glob, sys
 from datetime import datetime
 import xml.etree.ElementTree as ET
 
@@ -103,11 +103,12 @@ if __name__=='__main__':
     #db.metadata.drop_all(db.engine)
     #db.metadata.create_all(db.engine)
 
-    files = glob.glob('/home/atkm/.metha/20170923/*.xml.gz')
-    #files = glob.glob('/home/atkm/.metha/20170923/2017-08-31-*.xml.gz') # test.
+    xmlgz_list = sys.argv[1:] # /home/atkm/arxiv-project/xmls/*.xml.gz
+    #xmlgz_list = glob.glob('/home/atkm/.metha/20170923/*.xml.gz')
+    #xmlgz_list = glob.glob('/home/atkm/.metha/20170923/2017-08-31-*.xml.gz') # test.
 
     try:
-        for xmlgz in files:
+        for xmlgz in xmlgz_list:
             print(os.path.basename(xmlgz), end=' ')
             with gzip.open(xmlgz, 'rb') as f:
                 xml = ET.parse(f)

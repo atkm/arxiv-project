@@ -2,4 +2,4 @@
 __pycache__/
 analysis/.ipynb_checkpoints/
 *.pkl
-*.dump
+dumps/

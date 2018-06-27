@@ -13,5 +13,10 @@ python3 manage.py db init
 python3 manage.py db migrate # need to have permissions to postgres. e.g. sudo -u postgres createuser username.
 python3 manage.py db upgrade
 
+gsutil cp gs://arxiv-3121/metha.backup20170925.tgz .
+tar xzf metha.backup20170925.tgz
+mv .metha/b* xmls  # the directory has an ugly name
+python3 metha_to_postgres.py /opt/arxiv-project/xmls/*.xml.gz  # ensure permissions to 
+
 # how to run `create database arxiv_project` non-interactively?
 redis-server &
