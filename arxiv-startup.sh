@@ -5,6 +5,7 @@ cd /opt
 git clone $REPO
 cd arxiv-project
 pip3 install -r requirements.txt
+python3 -c "import nltk; nltk.download('stopwords')"
 source .envrc # => will complain that the venv dir cannot be found, but the necessary env vars will be set regardless.
 
 # ensure the migrations dir is not present
@@ -20,3 +21,6 @@ python3 metha_to_postgres.py /opt/arxiv-project/xmls/*.xml.gz  # ensure permissi
 
 # how to run `create database arxiv_project` non-interactively?
 redis-server &
+
+python3 worker.py &
+python3 manage.py runserver -h 0.0.0.0 -p 8080

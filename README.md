@@ -2,6 +2,7 @@
       * install git, pip, redis, and postgres
       * clone the repo
       * `pip install -r requirements.txt`
+      * `nltk.download('stopwords')` in a python shell
 
 - db (local):
       * install and initialize postgres. enable and start in systemctl

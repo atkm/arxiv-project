@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 q = Queue(connection=conn)
 
 from models import *
-from keyword_extraction_db import extract_keywords
+from keyword_extraction_db import extract_keywords, load_data
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,7 +37,10 @@ def get_keywords():
         return job.get_id()
 
 def get_keywords_func(category):
-    keywords = extract_keywords(category)
+    abstracts = load_data(category)
+    K = 200
+    topN = 5
+    keywords = extract_keywords(abstracts, K, topN)
     result = Result(
             category = category,
             keywords = keywords

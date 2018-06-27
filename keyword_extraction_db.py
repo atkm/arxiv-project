@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import MiniBatchKMeans
 import heapq
+import re
 from nltk.corpus import stopwords
 
 from app import db
@@ -87,6 +88,7 @@ def rank_phrases(text, n, ngram_range):
 # clustering is done with 1-grams
 def cluster_docs(abstracts, K):
     tfidf_vect = TfidfVectorizer()
+    # error here when running with db
     abs_tfidf = tfidf_vect.fit_transform(abstracts)
     #print('Running kmeans.')
     # reassignment_ratio is set to zero, since unbalanced clusters are not harmful to our application.
@@ -97,7 +99,7 @@ def cluster_docs(abstracts, K):
 
 # input: abstracts is a pd.Series.
 def extract_keywords(abstracts, K, topN, ngram_range=(2,3)):
-    cluster_idx = cluster_docs(abs_c, K)
+    cluster_idx = cluster_docs(abstracts, K)
     abs_clusters = pd.DataFrame({
         'cluster': cluster_idx,
         'text': abstracts
