@@ -8,7 +8,7 @@
       * install and initialize postgres. enable and start in systemctl
       * add user via createuser --interactive after sudo -u postgres -i
       * `create database arxiv\_project;` in psql
-      * set `DATABASE\_URL=postgresql://localhost/arxiv_project` (or postgresql:///arxiv_project ?) in .envrc
+      * set `DATABASE\_URL=postgresql://localhost/arxiv_project` (or postgresql:///arxiv_project , if psycopg throws a no password supplied error) in .envrc
       * python manage.py db {init,migrate,upgrade}
       * metha_to_postgres.py to populate rows
       * start redis-server

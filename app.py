@@ -27,12 +27,12 @@ def get_keywords():
     data = json.loads(request.data.decode())
     category = data['category']
     specificity = data['specificity']
-    #print("\n" + category +  specificity + "\n")
     search = Result.query.filter_by(category=category)
     if db.session.query(search.exists()).scalar():
         id = search.first().id
         return '_'.join(['nocompute', str(id)])
     else:
+        print('Queuing a job for ({}, {}).'.format(category, specificity))
         job = q.enqueue_call(
                 func = get_keywords_func, args=(category,specificity), result_ttl=3000 #unit = seconds
                 )
@@ -48,6 +48,7 @@ def get_keywords_func(category, specificity):
     expected_cluster_size = specificity_to_cluster_size(specificity)
     K = n_abstracts // expected_cluster_size
     topN = 5 # TODO: modify topN according to K
+    print('Category: {}, specificity: {}, n_abstracts: {}, K: {}'.format(category, specificity, n_abstracts, K))
     keywords = extract_keywords(abstracts, K, topN)
     result = Result(
             category = category,
