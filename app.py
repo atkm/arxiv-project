@@ -43,12 +43,13 @@ def get_keywords():
 # Roughly, specificity -> expected cluster size:
 # 1 -> 400, 2 -> 200, 3 -> 100, 4 -> 50.
 def get_keywords_func(category, specificity):
+    print('Category: {}, specificity: {}'.format(category, specificity))
     abstracts = load_data(category)
     n_abstracts = abstracts.shape[0]
     expected_cluster_size = specificity_to_cluster_size(specificity)
     K = n_abstracts // expected_cluster_size
     topN = 5 # TODO: modify topN according to K
-    print('Category: {}, specificity: {}, n_abstracts: {}, K: {}'.format(category, specificity, n_abstracts, K))
+    print('n_abstracts: {}, K: {}, expected_cluster_size: {}'.format(n_abstracts, K, expected_cluster_size))
     keywords = extract_keywords(abstracts, K, topN)
     result = Result(
             category = category,
