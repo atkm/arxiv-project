@@ -44,6 +44,15 @@
                   {% endfor %}
                 </select>
               </div>
+              <div class='dropdown form-group'>
+                <select type='text' class='form-control' style='max-width: 65px;'
+                  v-model='specificity' required>
+                  <option>1</option>
+                  <option selected>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </select>
+              </div>
               <button type='submit' class='btn btn-default' v-on:click='submit'>Submit</button>
             </div>
           </div>

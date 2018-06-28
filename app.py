@@ -26,20 +26,28 @@ def index():
 def get_keywords():
     data = json.loads(request.data.decode())
     category = data['category']
+    specificity = data['specificity']
+    #print("\n" + category +  specificity + "\n")
     search = Result.query.filter_by(category=category)
     if db.session.query(search.exists()).scalar():
         id = search.first().id
         return '_'.join(['nocompute', str(id)])
     else:
         job = q.enqueue_call(
-                func = get_keywords_func, args=(category,), result_ttl=3000
+                func = get_keywords_func, args=(category,specificity), result_ttl=3000 #unit = seconds
                 )
         return job.get_id()
 
-def get_keywords_func(category):
+# specificity is an integer between 1 and 4, inclusive.
+# The higher the value, the more specific keywords get.
+# Roughly, specificity -> expected cluster size:
+# 1 -> 400, 2 -> 200, 3 -> 100, 4 -> 50.
+def get_keywords_func(category, specificity):
     abstracts = load_data(category)
-    K = 200
-    topN = 5
+    n_abstracts = abstracts.shape[0]
+    expected_cluster_size = specificity_to_cluster_size(specificity)
+    K = n_abstracts // expected_cluster_size
+    topN = 5 # TODO: modify topN according to K
     keywords = extract_keywords(abstracts, K, topN)
     result = Result(
             category = category,
@@ -48,6 +56,19 @@ def get_keywords_func(category):
     db.session.add(result)
     db.session.commit()
     return result.id
+
+def specificity_to_cluster_size(specificity):
+    if (specificity == '1'):
+        return 400
+    elif (specificity == '2'):
+        return 200
+    elif (specificity == '3'):
+        return 100
+    elif (specificity == '4'):
+        return 50
+    else:
+        raise ValueError("Invalid specificity")
+    
 
 @app.route('/results/<job_key>', methods=['GET'])
 def get_results(job_key):

@@ -19,13 +19,14 @@ var keywordsResult = new Vue({
 var categoryDropdown = new Vue({
   el: '#category-dropdown',
   data: {
-    selected: ''
+    selected: '',
+    specificity: '2'
   },
   methods: {
     submit: function() {
       keywordsResult.hide();
       keywordsResult.beginLoading();
-      axios.post('/start', {'category': this.selected})
+      axios.post('/start', {'category': this.selected, 'specificity': this.specificity})
       .then(
         response => {
           this.pollResult(response.data);
