@@ -58,11 +58,12 @@ class Result(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String())
-    specificity = db.Column(db.Integer)
+    specificity = db.Column(db.String)
     keywords = db.Column(JSON)
 
-    def __init__(self, category, keywords):
+    def __init__(self, category, specificity, keywords):
         self.category = category
+        self.specificity = specificity
         self.keywords = keywords
 
     def __repr__(self):

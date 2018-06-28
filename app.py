@@ -27,8 +27,7 @@ def get_keywords():
     data = json.loads(request.data.decode())
     category = data['category']
     specificity = data['specificity']
-    # TODO: modify the model
-    search = Result.query.filter_by(category=category)
+    search = Result.query.filter_by(category=category, specificity=specificity)
     if db.session.query(search.exists()).scalar():
         id = search.first().id
         return '_'.join(['nocompute', str(id)])
@@ -54,6 +53,7 @@ def get_keywords_func(category, specificity):
     keywords = extract_keywords(abstracts, K, topN)
     result = Result(
             category = category,
+            specificity = specificity,
             keywords = keywords
             )
     db.session.add(result)
