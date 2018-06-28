@@ -27,6 +27,7 @@ def get_keywords():
     data = json.loads(request.data.decode())
     category = data['category']
     specificity = data['specificity']
+    # TODO: cache result in Redis
     search = Result.query.filter_by(category=category, specificity=specificity)
     if db.session.query(search.exists()).scalar():
         id = search.first().id
