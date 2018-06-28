@@ -58,6 +58,7 @@ class Result(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String())
+    specificity = db.Column(db.Integer)
     keywords = db.Column(JSON)
 
     def __init__(self, category, keywords):

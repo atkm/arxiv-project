@@ -27,6 +27,7 @@ def get_keywords():
     data = json.loads(request.data.decode())
     category = data['category']
     specificity = data['specificity']
+    # TODO: modify the model
     search = Result.query.filter_by(category=category)
     if db.session.query(search.exists()).scalar():
         id = search.first().id
