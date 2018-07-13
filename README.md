@@ -1,3 +1,7 @@
+![screenshot](keyword-extraction-screenshot-at.png =400x)
+
+Note to myself:
+
 - environment
       * install git, pip, redis, and postgres
       * clone the repo
@@ -36,6 +40,7 @@
 
 - deploy (GCP):
       * clone the arxiv-project repo.
+      * see arxiv-startup.sh
 
 - extra:
       * nltk.txt in root to fetch corpora (or create and push nlkt\_data dir)
