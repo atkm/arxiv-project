@@ -1,4 +1,4 @@
-![screenshot](keyword-extraction-screenshot-at.png =400x)
+![screenshot](keyword-extraction-screenshot-at.png)
 
 Note to myself:
 
